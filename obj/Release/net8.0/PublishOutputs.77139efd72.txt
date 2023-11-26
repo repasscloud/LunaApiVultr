@@ -1,3 +1,0 @@
-C:\Users\Administrator\source\repos\LunaApiVultr\bin\Release\net8.0\publish\LunaApiVultr.dll
-C:\Users\Administrator\source\repos\LunaApiVultr\bin\Release\net8.0\publish\LunaApiVultr.deps.json
-C:\Users\Administrator\source\repos\LunaApiVultr\bin\Release\net8.0\publish\LunaApiVultr.pdb
