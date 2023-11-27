@@ -1,7 +1,7 @@
 # LunaApiVultr Class Library
 
 ![NuGet](https://img.shields.io/nuget/v/LunaApiVultr)
-![License](https://img.shields.io/github/license/YourGitHubUsername/LunaApiVultr)
+![License](https://img.shields.io/github/license/repasscloud/LunaApiVultr)
 
 ## Overview
 
