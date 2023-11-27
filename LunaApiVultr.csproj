@@ -4,14 +4,22 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Version>1.0.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Danijel-James Wynyard</Authors>
+    <Company>RePass Cloud Pty Ltd</Company>
+    <Product>Luna API Vultr</Product>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="build.sh" />
     <None Remove=".gitignore" />
+    <None Remove="LICENSE" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Plans\" />
     <Folder Include="Models\Geo\" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
