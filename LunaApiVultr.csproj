@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Models\Plans\" />
-    <None Remove="Models\Geo\" />
+    <None Remove="build.sh" />
+    <None Remove=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Plans\" />
