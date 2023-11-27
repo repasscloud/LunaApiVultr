@@ -1,7 +1,8 @@
 using System.Text.Json.Serialization;
 using LunaApiVultr.Models.Shared;
 
-namespace LunaApiVultr.Models;
+namespace LunaApiVultr.Models.Geo;
+
 public class RegionData
 {
     [JsonPropertyName("regions")]

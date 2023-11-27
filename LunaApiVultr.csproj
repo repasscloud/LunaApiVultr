@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Models\Plans\" />
+    <None Remove="Models\Geo\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Plans\" />
+    <Folder Include="Models\Geo\" />
+  </ItemGroup>
 </Project>

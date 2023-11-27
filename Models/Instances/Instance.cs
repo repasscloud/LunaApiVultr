@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 
 namespace LunaApiVultr.Models.Instances;
+
 public class Instance
 {
     [JsonPropertyName("id")]

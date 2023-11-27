@@ -1,6 +1,7 @@
-﻿using LunaApiVultr.Models;
+﻿using LunaApiVultr.Models.Geo;
 using LunaApiVultr.Models.Instances;
 using LunaApiVultr.Models.OperatingSystem;
+using LunaApiVultr.Models.Plans;
 using LunaApiVultr.Models.Scripts;
 using LunaApiVultr.Models.Shared;
 using System.Text;
@@ -130,7 +131,6 @@ public class Vultr
         }
     }
 
-    
     public static async Task<List<StartupScript>> GetStartupScriptsAsync(VultrApiClient vultrApiClient)
     {
         try
@@ -166,7 +166,6 @@ public class Vultr
         }
     }
 
-
     public static async Task DeleteInstanceAsync(VultrApiClient vultrApiClient, string instanceId)
     {
         try
@@ -177,16 +176,8 @@ public class Vultr
             HttpResponseMessage response;
             response = await client.DeleteAsync(apiUrl);
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                // Process the successful response, if needed
-                string responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("Successful Response:");
-                Console.WriteLine(responseBody);
-            }
-            else
-            {
-                // Handle the case when the request was not successful
                 Console.WriteLine($"Error: {response.StatusCode}");
             }
         }
@@ -240,7 +231,7 @@ public class Vultr
         }
     }
 
-    public static async Task CreateNewInstanceAsync(VultrApiClient vultrApiClient, List<string> serverTags)
+    public static async Task CreateNewInstanceAsync(VultrApiClient vultrApiClient, List<string> serverTags, string? scriptId = null)
     {
         try
         {
@@ -250,6 +241,7 @@ public class Vultr
             NewInstance newInstance = new NewInstance()
             {
                 Tags = serverTags,
+                ScriptId = scriptId,
             };
 
             // Configure JsonSerializerOptions to exclude null values
@@ -261,6 +253,7 @@ public class Vultr
             // Convert the NewInstance object to JSON with configured options
             string jsonBody = JsonSerializer.Serialize(newInstance, jsonSerializerOptions);
 
+            // debug
             Console.WriteLine(jsonBody);
 
             HttpResponseMessage response;
@@ -275,7 +268,7 @@ public class Vultr
                 // Process the successful response, if needed
                 string responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine("Successful Response:");
-                
+
                 NewInstanceResult result = JsonSerializer.Deserialize<NewInstanceResult>(responseBody)!;
                 // save it to the DB Here
                 string instanceId = result!.Instance!.Id!;
@@ -287,6 +280,43 @@ public class Vultr
                 // Handle the case when the request was not successful
                 Console.WriteLine($"Error: {response.StatusCode}");
             }
+        }
+        catch (HttpRequestException ex)
+        {
+            // Log the exception details
+            Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+        catch (Exception ex)
+        {
+            // Log or handle other exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+    }
+
+    public static async Task<Instance> GetInstanceDetails(VultrApiClient vultrApiClient, string instanceId)
+    {
+        try
+        {
+            HttpClient client = vultrApiClient.GetHttpClient();
+            string apiUrl = $"{VultrApiSettings.ApiUrl}/instances/{instanceId}";
+
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+            // ensure success status code
+            response.EnsureSuccessStatusCode();
+
+            // if we reach here, request is successful
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            // hijack and existing class for this purpose
+            NewInstanceResult instanceResult = JsonSerializer.Deserialize<NewInstanceResult>(responseBody)!;
+
+            // break it down a level
+            Instance instanceDetails = instanceResult.Instance!;
+
+            return instanceDetails;
         }
         catch (HttpRequestException ex)
         {
