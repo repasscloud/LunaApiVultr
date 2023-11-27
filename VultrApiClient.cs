@@ -1,31 +1,37 @@
-﻿using static LunaApiVultr.Vultr;
+﻿using System.Net.Http.Headers;
 
 namespace LunaApiVultr
 {
-    public class VultrApiClient
+    public class VultrApiClient : IDisposable
     {
         private readonly string apiKey;
         private readonly HttpClient client;
 
-        public VultrApiClient(string apiKey)
+        public VultrApiClient(string apiKey, HttpClient httpClient)
         {
             this.apiKey = apiKey;
-            this.client = CreateHttpClient();
+            this.client = httpClient;
+            ConfigureHttpClient();
         }
 
-        private HttpClient CreateHttpClient()
+        private void ConfigureHttpClient()
         {
-            HttpClient httpClient = new HttpClient();
-
             // set up the headers, including the API key
-            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
-
-            return httpClient;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         }
 
         public HttpClient GetHttpClient()
         {
             return client;
+        }
+
+        // Dispose method to release resources when done
+        public void Dispose()
+        {
+            if (client != null)
+            {
+                client.Dispose();
+            }
         }
     }
 }

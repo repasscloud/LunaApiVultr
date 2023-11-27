@@ -1,7 +1,7 @@
 ﻿using LunaApiVultr.Models;
 using LunaApiVultr.Models.OperatingSystem;
+using LunaApiVultr.Models.Scripts;
 using LunaApiVultr.Models.Shared;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace LunaApiVultr;
@@ -13,19 +13,34 @@ public class Vultr
         public static string ApiUrl { get; set; } = "https://api.vultr.com/v2";
     }
 
-    public static async Task<List<Region>> GetRegionsAsync(string apiKey)
+    public static async Task<List<Region>> GetRegionsAsync(VultrApiClient vultrApiClient)
     {
-        VultrApiClient vultrApiClient = new VultrApiClient(apiKey);
-        HttpClient client = vultrApiClient.GetHttpClient();
+        try
+        {
+            HttpClient client = vultrApiClient.GetHttpClient();
+            string apiUrl = $"{VultrApiSettings.ApiUrl}/regions";
 
-        string response = await client.GetStringAsync($"{VultrApiSettings.ApiUrl}/regions");
-
-        RegionData regionData = JsonSerializer.Deserialize<RegionData>(response)!;
+            string response = await client.GetStringAsync(apiUrl);
+            RegionData regionData = JsonSerializer.Deserialize<RegionData>(response)!;
 
         return regionData.Regions!.ToList();
+
+        }
+        catch (HttpRequestException ex)
+        {
+            // Log the exception details
+            Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+        catch (Exception ex)
+        {
+            // Log or handle other exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
     }
 
-    public static async Task<PlansAvailable> GetAvailablePlansByRegionAsync(string apiKey, string region, string type = "vc2")
+    public static async Task<PlansAvailable> GetAvailablePlansByRegionAsync(VultrApiClient vultrApiClient, string region, string type = "vc2")
     {
         // List of valid types
         List<string> validTypes = new List<string>
@@ -39,34 +54,115 @@ public class Vultr
             type = "vc2";
         }
 
-        VultrApiClient vultrApiClient = new VultrApiClient(apiKey);
-        HttpClient client = vultrApiClient.GetHttpClient();
+        try
+        {
+            HttpClient client = vultrApiClient.GetHttpClient();
+            string apiUrl = $"{VultrApiSettings.ApiUrl}/regions/{region}/availability?type={type}";
+            string response = await client.GetStringAsync(apiUrl);
+            PlansAvailable result = JsonSerializer.Deserialize<PlansAvailable>(response)!;
 
-        string response = await client.GetStringAsync($"{VultrApiSettings.ApiUrl}/regions/{region}/availability?type={type}");
-        PlansAvailable result = JsonSerializer.Deserialize<PlansAvailable>(response)!;
-
-        return result!;
+            return result!;
+        }
+        catch (HttpRequestException ex)
+        {
+            // Log the exception details
+            Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+        catch (Exception ex)
+        {
+            // Log or handle other exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
     }
 
-    public static async Task<List<string>> GetCountriesAsync(string apiKey)
+    public static async Task<List<string>> GetCountriesAsync(VultrApiClient vultrApiClient)
     {
-        var regions = await GetRegionsAsync(apiKey);
+        try
+        {
+            var regions = await GetRegionsAsync(vultrApiClient);
+            List<string> uniqueCountries = regions.Select(region => region.Country).Distinct().ToList()!;
+            uniqueCountries = uniqueCountries.OrderBy(i => i).ToList();
 
-        List<string> uniqueCountries = regions.Select(region => region.Country).Distinct().ToList()!;
-        uniqueCountries = uniqueCountries.OrderBy(i => i).ToList();
-
-        return uniqueCountries;
+            return uniqueCountries;
+        }
+        catch (HttpRequestException ex)
+        {
+            // Log the exception details
+            Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+        catch (Exception ex)
+        {
+            // Log or handle other exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
     }
 
-    public static async Task<List<O>> GetAvilableOsAsync(string apiKey)
+    public static async Task<List<O>> GetAvilableOsAsync(VultrApiClient vultrApiClient)
     {
-        VultrApiClient vultrApiClient = new VultrApiClient(apiKey);
-        HttpClient client = vultrApiClient.GetHttpClient();
+        try
+        {
+            HttpClient client = vultrApiClient.GetHttpClient();
+            string apiUrl = $"{VultrApiSettings.ApiUrl}/os";
 
-        string response = await client.GetStringAsync($"{VultrApiSettings.ApiUrl}/os");
+            string response = await client.GetStringAsync(apiUrl);
+            VultrOs osData = JsonSerializer.Deserialize<VultrOs>(response)!;
 
-        VultrOs osData = JsonSerializer.Deserialize<VultrOs>(response)!;
-
-        return osData.Os!.ToList();
+            return osData.Os!.ToList();
+        }
+        catch (HttpRequestException ex)
+        {
+            // Log the exception details
+            Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+        catch (Exception ex)
+        {
+            // Log or handle other exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
     }
+
+    
+    public static async Task<List<StartupScript>> GetStartupScriptsAsync(VultrApiClient vultrApiClient)
+    {
+        try
+        {
+            HttpClient client = vultrApiClient.GetHttpClient();
+            string apiUrl = $"{VultrApiSettings.ApiUrl}/startup-scripts";
+            
+            // Log the request details
+            //Console.WriteLine($"Making GET request to: {apiUrl}");
+
+            // Log each header individually
+            foreach (var header in client.DefaultRequestHeaders)
+            {
+                //Console.WriteLine($"Header: {header.Key} = {string.Join(", ", header.Value)}");
+            }
+
+            string response = await client.GetStringAsync(apiUrl);
+            InitializationScripts initScripts = JsonSerializer.Deserialize<InitializationScripts>(response)!;
+
+            return initScripts.StartupScripts!.ToList();
+        }
+        catch (HttpRequestException ex)
+        {
+            // Log the exception details
+            Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+        catch (Exception ex)
+        {
+            // Log or handle other exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+    }
+
+
+
 }
