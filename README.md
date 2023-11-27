@@ -45,3 +45,6 @@ If you would like to contribute to the development of this library, please follo
 ## License
 
 This project is licensed under the [MIT License](LICENSE)
+
+## Icon
+<a href="https://www.flaticon.com/free-icons/moon" title="moon icons">Moon icons created by Freepik - Flaticon</a>
