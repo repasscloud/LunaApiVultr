@@ -2,6 +2,7 @@
 using LunaApiVultr.Models.OperatingSystem;
 using LunaApiVultr.Models.Scripts;
 using LunaApiVultr.Models.Shared;
+using System.Text;
 using System.Text.Json;
 
 namespace LunaApiVultr;
@@ -164,5 +165,47 @@ public class Vultr
     }
 
 
+    public static async Task CreateNewInstanceAsync(VultrApiClient vultrApiClient)
+    {
+        try
+        {
+            HttpClient client = vultrApiClient.GetHttpClient();
+            string apiUrl = $"{VultrApiSettings.ApiUrl}/instances";
+            
+            NewInstance newInstance = new NewInstance();
+            string jsonBody = JsonSerializer.Serialize(newInstance);
+            
+            HttpResponseMessage response;
+            using (var content = new StringContent(jsonBody, Encoding.UTF8, "application/json"))
+            {
+                response = await client.PostAsync(apiUrl, content);
+            }
 
+            // Check if the request was successful (status code 2xx)
+            if (response.IsSuccessStatusCode)
+            {
+                // Process the successful response, if needed
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Successful Response:");
+                Console.WriteLine(responseBody);
+            }
+            else
+            {
+                // Handle the case when the request was not successful
+                Console.WriteLine($"Error: {response.StatusCode}");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            // Log the exception details
+            Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+        catch (Exception ex)
+        {
+            // Log or handle other exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw; // Rethrow the exception if needed
+        }
+    }
 }
