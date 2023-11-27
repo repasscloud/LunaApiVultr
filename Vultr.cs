@@ -270,10 +270,15 @@ public class Vultr
                 Console.WriteLine("Successful Response:");
 
                 NewInstanceResult result = JsonSerializer.Deserialize<NewInstanceResult>(responseBody)!;
+                Instance newlyCreatedInstance = result.Instance!;
+                //
                 // save it to the DB Here
-                string instanceId = result!.Instance!.Id!;
-                //{"instance":{"id":"be34a66c-3ec0-4ce2-91a5-084462187647","os":"Alpine Linux x64","ram":512,"disk":0,"main_ip":"0.0.0.0","vcpu_count":1,"region":"ewr","plan":"vc2-1c-0.5gb","date_created":"2023-11-27T05:10:20+00:00","status":"pending","allowed_bandwidth":0,"netmask_v4":"","gateway_v4":"0.0.0.0","power_status":"running","server_status":"none","v6_network":"","v6_main_ip":"","v6_network_size":0,"label":"","internal_ip":"","kvm":"","hostname":"vultr.guest","tag":"bird","tags":["bird","cats"],"os_id":2076,"app_id":0,"image_id":"","firewall_group_id":"","features":[],"user_scheme":"root","default_password":"[3Tf#nkKa[4*6H,x"}}
+                //
+
+                // debug
                 Console.WriteLine(responseBody);
+                // writes data like below
+                //{"instance":{"id":"be34a66c-3ec0-4ce2-91a5-084462187647","os":"Alpine Linux x64","ram":512,"disk":0,"main_ip":"0.0.0.0","vcpu_count":1,"region":"ewr","plan":"vc2-1c-0.5gb","date_created":"2023-11-27T05:10:20+00:00","status":"pending","allowed_bandwidth":0,"netmask_v4":"","gateway_v4":"0.0.0.0","power_status":"running","server_status":"none","v6_network":"","v6_main_ip":"","v6_network_size":0,"label":"","internal_ip":"","kvm":"","hostname":"vultr.guest","tag":"bird","tags":["bird","cats"],"os_id":2076,"app_id":0,"image_id":"","firewall_group_id":"","features":[],"user_scheme":"root","default_password":"[3Tf#nkKa[4*6H,x"}}
             }
             else
             {
