@@ -44,7 +44,7 @@ namespace LunaApiVultr.Models
         public List<string>? AttachVpc2 { get; set; }
 
         [JsonPropertyName("label")]
-        public string Label { get; set; } = null!;
+        public string? Label { get; set; }
 
         [JsonPropertyName("sshkey_id")]
         public List<string>? SshkeyId { get; set; }
@@ -54,7 +54,7 @@ namespace LunaApiVultr.Models
         public string Backups { get; set; } = "disabled";
 
         [JsonPropertyName("app_id")]
-        public int AppId { get; set; } = 0;
+        public int? AppId { get; set; }
 
         [JsonPropertyName("image_id")]
         public string? ImageId { get; set; }
@@ -63,13 +63,13 @@ namespace LunaApiVultr.Models
         public string? UserData { get; set; }
 
         [JsonPropertyName("ddos_protection")]
-        public bool DdosProtection { get; set; } = false;
+        public bool? DdosProtection { get; set; }
 
         [JsonPropertyName("activation_email")]
-        public bool ActivationEmail { get; set; } = false;
+        public bool? ActivationEmail { get; set; } = false;
 
         [JsonPropertyName("hostname")]
-        public string Hostname { get; set; } = null!;
+        public string? Hostname { get; set; }
 
         // [JsonPropertyName("tag")]
         // public string Tag { get; set; }
@@ -84,15 +84,15 @@ namespace LunaApiVultr.Models
         // public string EnablePrivateNetwork { get; set; }
 
         [JsonPropertyName("enable_vpc")]
-        public bool EnableVpc { get; set; } = false;
+        public bool? EnableVpc { get; set; }
 
         [JsonPropertyName("enable_vpc2")]
-        public bool EnableVpc2 { get; set; } = false;
+        public bool? EnableVpc2 { get; set; }
 
         [JsonPropertyName("tags")]
         public List<string>? Tags { get; set; }
 
         [JsonPropertyName("user_scheme")]
-        public string UserScheme { get; set; } = "root";
+        public string? UserScheme { get; set; }
     }
 }
