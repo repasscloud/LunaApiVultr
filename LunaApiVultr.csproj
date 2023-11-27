@@ -10,7 +10,7 @@
     <Company>RePass Cloud Pty Ltd</Company>
     <Product>Luna API Vultr</Product>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/OWNER/REPOSITORY</RepositoryUrl>
+    <RepositoryUrl>https://github.com/repasscloud/LunaApiVultr</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
