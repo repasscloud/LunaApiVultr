@@ -44,4 +44,4 @@ If you would like to contribute to the development of this library, please follo
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE)
