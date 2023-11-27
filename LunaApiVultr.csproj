@@ -4,25 +4,32 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Danijel-James Wynyard</Authors>
     <Company>RePass Cloud Pty Ltd</Company>
     <Product>Luna API Vultr</Product>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/OWNER/REPOSITORY</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="icon.png" />
+    <!-- Include the icon file as Content -->
+    <Content Include="icon.png">
+      <PackagePath>content\icon.png</PackagePath>
+    </Content>
   </ItemGroup>
+  
   <ItemGroup>
     <None Remove="build.sh" />
     <None Remove=".gitignore" />
     <None Remove="LICENSE" />
   </ItemGroup>
+  
   <ItemGroup>
     <Folder Include="Models\Plans\" />
     <Folder Include="Models\Geo\" />
+    <!-- Include README.md in the root of the package -->
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
